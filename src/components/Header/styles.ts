@@ -4,6 +4,12 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+
+  height: 2.5rem;
+
+  margin: 2rem 1.25em;
+  max-width: 1160px;
 `
 
 export const ActionContainer = styled.div`
