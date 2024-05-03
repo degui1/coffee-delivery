@@ -1,0 +1,23 @@
+import { MapPin, ShoppingCart } from 'phosphor-react'
+import { ActionContainer, HeaderContainer } from './styles'
+
+import Logo from '../../assets/Logo.svg'
+import { NavLink } from 'react-router-dom'
+
+export function Header() {
+  return (
+    <HeaderContainer>
+      <img src={Logo} alt="" />
+      <ActionContainer>
+        <button className="localizationButton">
+          <MapPin size={22} />
+          Porto Alegre, RS
+        </button>
+
+        <NavLink to="checkout" className="cartButton">
+          <ShoppingCart size={22} />
+        </NavLink>
+      </ActionContainer>
+    </HeaderContainer>
+  )
+}

@@ -4,15 +4,13 @@ import { GlobalStyle } from './styles/global'
 import { BrowserRouter } from 'react-router-dom'
 import { Router } from './Router'
 
-function App() {
+export function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
-      <GlobalStyle />
       <BrowserRouter>
         <Router />
       </BrowserRouter>
+      <GlobalStyle />
     </ThemeProvider>
   )
 }
-
-export default App
