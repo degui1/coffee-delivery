@@ -5,6 +5,7 @@ export const FeedContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 3.5rem;
+  height: 60vh;
 `
 
 export const SectionContainer = styled.section`
