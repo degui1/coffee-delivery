@@ -1,11 +1,61 @@
-import { HtmlHTMLAttributes } from 'react'
+import {
+  FocusEvent,
+  HTMLAttributes,
+  InputHTMLAttributes,
+  LegacyRef,
+  forwardRef,
+  useState,
+} from 'react'
+// import { FieldError } from 'react-hook-form'
+import { Box, Container, ErrorMessage } from './styles'
 
-type ITextFieldProps = HtmlHTMLAttributes<HTMLInputElement> & {}
-
-export function TextField({ ...refs }: ITextFieldProps) {
-  return (
-    <Container>
-      <input {...refs} />
-    </Container>
-  )
+type ITextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
+  optional?: boolean
+  containerProps?: HTMLAttributes<HTMLDivElement>
+  // error?: FieldError
+  error?: Error
 }
+
+export const TextInput = forwardRef(function TextInput(
+  {
+    optional,
+    containerProps,
+    error,
+    onFocus,
+    onBlur,
+    ...rest
+  }: ITextFieldProps,
+  ref: LegacyRef<HTMLInputElement>,
+) {
+  const [isFocused, setIsFocused] = useState(false)
+
+  function handleFocus(event: FocusEvent<HTMLInputElement, Element>) {
+    setIsFocused(true)
+    onFocus?.(event)
+  }
+
+  function handleBlur(event: FocusEvent<HTMLInputElement, Element>) {
+    setIsFocused(false)
+    onBlur?.(event)
+  }
+
+  return (
+    <Box {...containerProps}>
+      <Container data-state={isFocused ? 'focused' : 'blurred'}>
+        <input
+          type="text"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          ref={ref}
+          {...rest}
+        />
+
+        {optional ? <span>Opcional</span> : null}
+      </Container>
+
+      {error?.message ? (
+        <ErrorMessage role="alert">{error.message}</ErrorMessage>
+      ) : null}
+    </Box>
+  )
+})

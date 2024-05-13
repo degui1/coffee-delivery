@@ -16,16 +16,18 @@ export const CheckoutContainer = styled.div`
 const baseCard = styled.div`
   max-width: 640px;
   background-color: ${({ theme }) => theme['base-card']};
-  display: flex;
-  flex-flow: column;
   padding: 2.5rem;
   border-radius: 6px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 `
 
 export const FormContainer = styled(baseCard)``
 
 export const PaymentMethodContainer = styled(baseCard)`
-  gap: 2rem;
   .paymentContainer {
     display: flex;
     flex-direction: row;
@@ -56,4 +58,12 @@ export const InformSection = styled.div`
   svg {
     color: ${({ theme }) => theme.purple};
   }
+`
+
+export const FormFieldsContainer = styled.div`
+  display: grid;
+  grid-template-areas: 'cep . .', 'street street street',
+    'number fullAddress fullAddress', 'neighborhood city state';
+  grid-template-columns: 200px 1fr 60px;
+  grid-gap: 16px 12px;
 `

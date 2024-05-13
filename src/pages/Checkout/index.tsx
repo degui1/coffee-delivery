@@ -1,7 +1,8 @@
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import {
   CheckoutContainer,
   FormContainer,
+  FormFieldsContainer,
   InformSection,
   PaymentMethodContainer,
 } from './styles'
@@ -14,6 +15,7 @@ import {
 } from 'phosphor-react'
 import { Radio } from '../../components/Form/Radio'
 import { useTheme } from 'styled-components'
+import { TextInput } from '../../components/Form/TextField'
 
 export function Checkout() {
   const theme = useTheme()
@@ -32,17 +34,59 @@ export function Checkout() {
                 <p>Informe o endereco onde deseja receber seu pedido</p>
               </div>
             </InformSection>
-            <FormProvider>
-              <div>
-                <input type="text" />
-                <input type="text" />
-                <input type="text" />
-                <input type="text" />
-                <input type="text" />
-                <input type="text" />
-                <input type="text" />
-              </div>
-            </FormProvider>
+            <FormFieldsContainer>
+              <TextInput
+                placeholder="CEP"
+                type="number"
+                // containerProps={{ style: { gridArea: 'cep' } }}
+                error={new Error('Test')}
+                {...register('cep', { valueAsNumber: true })}
+              />
+
+              <TextInput
+                placeholder="Rua"
+                // containerProps={{ style: { gridArea: 'street' } }}
+                error={new Error('Test')}
+                {...register('street')}
+              />
+
+              <TextInput
+                placeholder="Número"
+                // containerProps={{ style: { gridArea: 'number' } }}
+                error={new Error('Test')}
+                {...register('number')}
+              />
+
+              <TextInput
+                placeholder="Complemento"
+                optional
+                // containerProps={{ style: { gridArea: 'fullAddress' } }}
+                error={new Error('Test')}
+                {...register('fullAddress')}
+              />
+
+              <TextInput
+                placeholder="Bairro"
+                // containerProps={{ style: { gridArea: 'neighborhood' } }}
+                error={new Error('Test')}
+                {...register('neighborhood')}
+              />
+
+              <TextInput
+                placeholder="Cidade"
+                containerProps={{ style: { gridArea: 'city' } }}
+                error={new Error('Test')}
+                {...register('city')}
+              />
+
+              <TextInput
+                placeholder="UF"
+                maxLength={2}
+                containerProps={{ style: { gridArea: 'state' } }}
+                error={new Error('test')}
+                {...register('state')}
+              />
+            </FormFieldsContainer>
           </FormContainer>
         </form>
         <PaymentMethodContainer>

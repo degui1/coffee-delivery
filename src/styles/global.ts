@@ -10,7 +10,6 @@ export const GlobalStyle = createGlobalStyle`
 
   :focus {
     outline: 0;
-    box-shadow: 0 0 0 2px ${(props) => props.theme['base-hover']};
   }
 
   body {
@@ -19,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
-  border-style, input, textarea, button {
+  body, input, textarea, button {
     ${mixins.fonts.textM}
   }
 `
