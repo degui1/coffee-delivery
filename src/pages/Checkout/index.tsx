@@ -1,10 +1,19 @@
 import { useForm } from 'react-hook-form'
 import {
+  AmountContainer,
+  AsideContainer,
   CheckoutContainer,
   FormContainer,
   FormFieldsContainer,
   InformSection,
+  ListItem,
+  OrderButton,
+  OrderContainer,
+  OrderListContainer,
+  PaymentContainer,
   PaymentMethodContainer,
+  Total,
+  Value,
 } from './styles'
 import {
   Bank,
@@ -12,10 +21,14 @@ import {
   CurrencyDollar,
   MapPinLine,
   Money,
+  Trash,
 } from 'phosphor-react'
 import { Radio } from '../../components/Form/Radio'
 import { useTheme } from 'styled-components'
 import { TextInput } from '../../components/Form/TextField'
+
+import latteCoffeeImg from '../../assets/coffees/Expresso.svg'
+import { Counter } from '../../components/Counter'
 
 export function Checkout() {
   const theme = useTheme()
@@ -25,7 +38,8 @@ export function Checkout() {
     <CheckoutContainer>
       <main>
         <h1>Complete seu pedido</h1>
-        <form action="">
+
+        <form id="order">
           <FormContainer>
             <InformSection>
               <MapPinLine size={22} color={theme['yellow-dark']} />
@@ -38,21 +52,21 @@ export function Checkout() {
               <TextInput
                 placeholder="CEP"
                 type="number"
-                // containerProps={{ style: { gridArea: 'cep' } }}
+                containerProps={{ style: { gridArea: 'cep' } }}
                 error={new Error('Test')}
                 {...register('cep', { valueAsNumber: true })}
               />
 
               <TextInput
                 placeholder="Rua"
-                // containerProps={{ style: { gridArea: 'street' } }}
+                containerProps={{ style: { gridArea: 'street' } }}
                 error={new Error('Test')}
                 {...register('street')}
               />
 
               <TextInput
                 placeholder="Número"
-                // containerProps={{ style: { gridArea: 'number' } }}
+                containerProps={{ style: { gridArea: 'number' } }}
                 error={new Error('Test')}
                 {...register('number')}
               />
@@ -60,14 +74,14 @@ export function Checkout() {
               <TextInput
                 placeholder="Complemento"
                 optional
-                // containerProps={{ style: { gridArea: 'fullAddress' } }}
+                containerProps={{ style: { gridArea: 'fullAddress' } }}
                 error={new Error('Test')}
                 {...register('fullAddress')}
               />
 
               <TextInput
                 placeholder="Bairro"
-                // containerProps={{ style: { gridArea: 'neighborhood' } }}
+                containerProps={{ style: { gridArea: 'neighborhood' } }}
                 error={new Error('Test')}
                 {...register('neighborhood')}
               />
@@ -88,50 +102,88 @@ export function Checkout() {
               />
             </FormFieldsContainer>
           </FormContainer>
+
+          <PaymentMethodContainer>
+            <InformSection>
+              <CurrencyDollar size={22} />
+              <div>
+                <span>Pagamento</span>
+                <p>
+                  O pagamento é feito na entrega. Escolha a forma que deseja
+                  pagar
+                </p>
+              </div>
+            </InformSection>
+
+            <PaymentContainer>
+              <Radio
+                isSelected={true}
+                {...register('paymentMethod')}
+                value="credit"
+              >
+                <CreditCard size={16} />
+                <span>Cartão de crédito</span>
+              </Radio>
+              <Radio
+                isSelected={false}
+                {...register('paymentMethod')}
+                value="credit"
+              >
+                <Bank size={16} />
+                <span>Cartão de débito</span>
+              </Radio>
+              <Radio
+                isSelected={false}
+                {...register('paymentMethod')}
+                value="credit"
+              >
+                <Money size={16} />
+                <span>Dinheiro</span>
+              </Radio>
+            </PaymentContainer>
+          </PaymentMethodContainer>
         </form>
-        <PaymentMethodContainer>
-          <InformSection>
-            <CurrencyDollar size={22} />
-            <div>
-              <span>Pagamento</span>
-              <p>
-                O pagamento é feito na entrega. Escolha a forma que deseja pagar
-              </p>
-            </div>
-          </InformSection>
-
-          <div className="paymentContainer">
-            <Radio
-              isSelected={true}
-              {...register('paymentMethod')}
-              value="credit"
-            >
-              <CreditCard size={16} />
-              <span>Cartão de crédito</span>
-            </Radio>
-            <Radio
-              isSelected={false}
-              {...register('paymentMethod')}
-              value="credit"
-            >
-              <Bank size={16} />
-              <span>Cartão de débito</span>
-            </Radio>
-            <Radio
-              isSelected={false}
-              {...register('paymentMethod')}
-              value="credit"
-            >
-              <Money size={16} />
-              <span>Dinheiro</span>
-            </Radio>
-          </div>
-        </PaymentMethodContainer>
       </main>
-
-      <aside>
+      <AsideContainer>
         <h1>Cafés selecionados</h1>
-      </aside>
+
+        <OrderContainer>
+          <OrderListContainer>
+            <ListItem>
+              <img src={latteCoffeeImg} alt="" />
+
+              <div>
+                <span>Expresso Tradicional</span>
+                <div>
+                  <Counter />
+                  <button>
+                    <Trash /> Remover
+                  </button>
+                </div>
+              </div>
+
+              <span>R$ 9,90</span>
+            </ListItem>
+          </OrderListContainer>
+          <AmountContainer>
+            <Value>
+              <span>Total de itens</span>
+              <span>R$ 29,70</span>
+            </Value>
+            <Value>
+              <span>Entrega</span>
+              <span>R$ 3,50</span>
+            </Value>
+            <Total>
+              <span>Total</span>
+              <span>R$ 33,20</span>
+            </Total>
+          </AmountContainer>
+          <OrderButton type="submit" form="order">
+            Confirmar Pedido
+          </OrderButton>
+        </OrderContainer>
+      </AsideContainer>
     </CheckoutContainer>
   )
 }

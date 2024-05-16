@@ -14,6 +14,8 @@ export const Container = styled.label`
   ${mixins.fonts.buttonM}
   transition: all 0.2s;
 
+  cursor: pointer;
+
   &:hover {
     background-color: ${({ theme }) => theme['base-hover']};
   }
