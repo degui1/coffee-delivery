@@ -6,12 +6,15 @@ import {
   FormContainer,
   FormFieldsContainer,
   InformSection,
+  ListActionsContainer,
+  ListInfo,
   ListItem,
   OrderButton,
   OrderContainer,
   OrderListContainer,
   PaymentContainer,
   PaymentMethodContainer,
+  RemoveListItemButton,
   Total,
   Value,
 } from './styles'
@@ -150,17 +153,34 @@ export function Checkout() {
         <OrderContainer>
           <OrderListContainer>
             <ListItem>
-              <img src={latteCoffeeImg} alt="" />
-
-              <div>
-                <span>Expresso Tradicional</span>
+              <ListInfo>
+                <img src={latteCoffeeImg} alt="" />
                 <div>
-                  <Counter />
-                  <button>
-                    <Trash /> Remover
-                  </button>
+                  <span>Expresso Tradicional</span>
+                  <ListActionsContainer>
+                    <Counter />
+                    <RemoveListItemButton>
+                      <Trash size={16} /> <span>Remover</span>
+                    </RemoveListItemButton>
+                  </ListActionsContainer>
                 </div>
-              </div>
+              </ListInfo>
+
+              <span>R$ 9,90</span>
+            </ListItem>
+            <ListItem>
+              <ListInfo>
+                <img src={latteCoffeeImg} alt="" />
+                <div>
+                  <span>Expresso Tradicional</span>
+                  <ListActionsContainer>
+                    <Counter />
+                    <RemoveListItemButton>
+                      <Trash size={16} /> <span>Remover</span>
+                    </RemoveListItemButton>
+                  </ListActionsContainer>
+                </div>
+              </ListInfo>
 
               <span>R$ 9,90</span>
             </ListItem>

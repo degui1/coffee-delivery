@@ -17,4 +17,19 @@ export const CounterContainer = styled.div`
     ${mixins.fonts.textM}
     color: ${(props) => props.theme['base-title']};
   }
+
+  span {
+    transition: all 0.2s;
+    cursor: pointer;
+
+    svg {
+      color: ${({ theme }) => theme.purple};
+    }
+
+    &:hover {
+      svg {
+        color: ${({ theme }) => theme['purple-dark']};
+      }
+    }
+  }
 `
