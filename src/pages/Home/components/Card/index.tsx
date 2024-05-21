@@ -1,5 +1,4 @@
 import { ShoppingCart } from 'phosphor-react'
-import { useTheme } from 'styled-components'
 
 import { BuySection, CardCoffee } from './styles'
 
@@ -7,8 +6,6 @@ import Expresso from '../../../../assets/coffees/Expresso.svg'
 import { Counter } from '../../../../components/Counter'
 
 export function Card() {
-  const theme = useTheme()
-
   return (
     <CardCoffee>
       <img src={Expresso} alt="" />
@@ -22,12 +19,7 @@ export function Card() {
         </span>
         <Counter />
         <button>
-          <ShoppingCart
-            size={32}
-            weight="fill"
-            color={theme.background}
-            style={{ backgroundColor: theme['purple-dark'] }}
-          />
+          <ShoppingCart size={32} weight="fill" />
         </button>
       </BuySection>
     </CardCoffee>

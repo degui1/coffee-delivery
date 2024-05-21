@@ -58,8 +58,16 @@ export const BuySection = styled.div`
     border: none;
 
     svg {
+      background-color: ${({ theme }) => theme['purple-dark']};
+      color: ${({ theme }) => theme.background};
       padding: 8px;
       border-radius: 6px;
+      transition: all 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background-color: ${({ theme }) => theme.purple};
+      }
     }
   }
 `
