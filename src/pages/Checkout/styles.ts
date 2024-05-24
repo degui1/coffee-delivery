@@ -10,7 +10,14 @@ export const CheckoutContainer = styled.div`
   main {
     display: flex;
     flex-direction: column;
+
     gap: 2rem;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
   }
 `
 
