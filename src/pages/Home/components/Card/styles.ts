@@ -13,21 +13,11 @@ export const CardCoffee = styled.div`
 
   padding: 1.25rem 1.5rem;
 
-  justify-content: space-between;
   align-items: center;
 
   text-align: center;
 
-  .pill {
-    background-color: ${(props) => props.theme['yellow-light']};
-    ${mixins.fonts.tag}
-    text-transform: uppercase;
-    color: ${(props) => props.theme['yellow-dark']};
-    padding: 4px 2px;
-    border-radius: 100px;
-    text-align: center;
-    width: 80px;
-  }
+  gap: 1rem;
 
   h3 {
     ${mixins.fonts.titleS}
@@ -41,6 +31,13 @@ export const CardCoffee = styled.div`
     width: 100px;
     margin-top: calc(0px - 2rem - 8px);
   }
+`
+
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 `
 
 export const BuySection = styled.div`
@@ -70,4 +67,10 @@ export const BuySection = styled.div`
       }
     }
   }
+`
+export const TagContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 0.25rem;
 `
