@@ -40,15 +40,18 @@ function AddCoffee(state: Coffee[], coffeeOutOf: Coffee): Coffee[] {
   }
 }
 
-function RemoveCoffee(state: Coffee[], coffeeOutOf: Coffee): Coffee[] {
+function ReduceAmount(state: Coffee[], coffeeOutOf: Coffee): Coffee[] {
   return state.map((coffee) => {
-    if (coffee.id === coffeeOutOf.id) {
-      if (coffee.amount > 1) {
-        return { ...coffee, amount: coffee.amount - 1 }
-      }
+    if (coffee.id === coffeeOutOf.id && coffeeOutOf.amount > 0) {
+      return { ...coffee, amount: coffee.amount + 1 }
     }
+
     return coffee
   })
+}
+
+function RemoveCoffee(state: Coffee[], coffeeOutOf: Coffee): Coffee[] {
+  return state.filter((coffee) => coffee.id !== coffeeOutOf.id)
 }
 
 export function CartReducer(state: Coffee[], action: CartActions) {
@@ -58,7 +61,11 @@ export function CartReducer(state: Coffee[], action: CartActions) {
     }
 
     case CartActionTypes.REMOVE_COFFEE: {
-      return RemoveCoffee(state, action.payload.coffee)
+      if (action.payload.coffee.amount > 1) {
+        return ReduceAmount(state, action.payload.coffee)
+      } else {
+        return RemoveCoffee(state, action.payload.coffee)
+      }
     }
 
     default:
