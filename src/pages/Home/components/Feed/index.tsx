@@ -2,7 +2,7 @@ import { Coffee, Package, ShoppingCart, Timer } from 'phosphor-react'
 import { useTheme } from 'styled-components'
 
 import { FeedContainer, Info, SectionContainer } from './styles'
-import FeedImg from '../../../../assets/FeedImg.svg'
+import FeedImg from '../../../../../public/images/FeedImg.svg'
 
 export function Feed() {
   const theme = useTheme()

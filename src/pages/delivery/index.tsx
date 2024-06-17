@@ -1,5 +1,5 @@
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
-import illustration from '../../assets/Illustration.svg'
+import illustration from '../../../public/images/Illustration.svg'
 import {
   DeliveryContainer,
   DeliveryHeader,

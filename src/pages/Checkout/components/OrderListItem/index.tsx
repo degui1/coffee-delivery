@@ -7,8 +7,6 @@ import {
   RemoveListItemButton,
 } from './styles'
 
-import latteCoffeeImg from '../../../../assets/coffees/Expresso.svg'
-
 export function OrderListItem() {
   return (
     <ListItem>

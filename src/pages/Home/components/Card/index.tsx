@@ -2,39 +2,44 @@ import { ShoppingCart } from 'phosphor-react'
 
 import { BuySection, CardCoffee, InfoContainer, TagContainer } from './styles'
 
-import Expresso from '../../../../assets/coffees/Expresso.svg'
 import { Counter } from '../../../../components/Counter'
-import { Coffee } from '../..'
 import { Pill } from './components/pill'
 import { useState } from 'react'
 
-interface ICardProps {
-  coffee: Coffee
+type ICardProps = {
+  coffee: {
+    id: string
+    title: string
+    description: string
+    tags: string[]
+    price: number
+    image: string
+  }
 }
 
 export function Card({ coffee }: ICardProps) {
-  const [amount, setAmount] = useState(0)
+  const [quantity, setQuantity] = useState(0)
 
   function reduceAmount() {
-    if (amount > 0) {
-      setAmount((state) => state - 1)
+    if (quantity > 1) {
+      setQuantity((state) => state - 1)
     }
   }
 
   function increaseAmount() {
-    setAmount((state) => state + 1)
+    setQuantity((state) => state + 1)
   }
 
   return (
     <CardCoffee>
-      <img src={Expresso} alt="" />
+      <img src={coffee.image} alt="Coffee image" />
       <TagContainer>
         {coffee.tags.map((tag) => {
-          return <Pill key={coffee.id}>{tag}</Pill>
+          return <Pill key={crypto.randomUUID()}>{tag}</Pill>
         })}
       </TagContainer>
       <InfoContainer>
-        <h3>{coffee.name}</h3>
+        <h3>{coffee.title}</h3>
         <p>{coffee.description}</p>
 
         <BuySection>
@@ -42,7 +47,7 @@ export function Card({ coffee }: ICardProps) {
             R$ <span className="cardPrice">{coffee.price}</span>
           </span>
           <Counter
-            amount={amount}
+            amount={quantity}
             onReduceAmount={reduceAmount}
             onIncreaseAmount={increaseAmount}
           />
