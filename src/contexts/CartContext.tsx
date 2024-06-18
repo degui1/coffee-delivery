@@ -1,5 +1,14 @@
 import { createContext, useReducer } from 'react'
-import { CartActions, CartReducer } from '../reducers/Cart/CartReducer'
+import {
+  CartActions,
+  CartReducer,
+  CartState,
+} from '../reducers/Cart/CartReducer'
+
+interface ICartContext {
+  cartState: CartState
+  dispatchCartState: React.Dispatch<CartActions>
+}
 
 export const CartContext = createContext({} as ICartContext)
 
@@ -8,9 +17,13 @@ interface ICartProvider {
 }
 
 export function CartProvider({ children }: ICartProvider) {
-  const [coffees, dispatchCoffees] = useReducer(CartReducer, [])
+  const [cartState, dispatchCartState] = useReducer(CartReducer, {
+    cart: [],
+    orders: [],
+  })
+
   return (
-    <CartContext.Provider value={{ coffees, dispatchCoffees }}>
+    <CartContext.Provider value={{ cartState, dispatchCartState }}>
       {children}
     </CartContext.Provider>
   )

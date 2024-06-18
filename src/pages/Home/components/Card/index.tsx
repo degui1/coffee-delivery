@@ -5,6 +5,8 @@ import { BuySection, CardCoffee, InfoContainer, TagContainer } from './styles'
 import { Counter } from '../../../../components/Counter'
 import { Pill } from './components/pill'
 import { useState } from 'react'
+import { useCart } from '../../../../hooks/useCart'
+import { CartActionTypes } from '../../../../reducers/Cart/CartReducer'
 
 type ICardProps = {
   coffee: {
@@ -19,15 +21,30 @@ type ICardProps = {
 
 export function Card({ coffee }: ICardProps) {
   const [quantity, setQuantity] = useState(0)
+  // const [isItemAdded, setIsItemAdded] = useState(false)
 
-  function reduceAmount() {
+  const { dispatchCartState } = useCart()
+
+  function reduceAmount(): void {
     if (quantity > 1) {
       setQuantity((state) => state - 1)
     }
   }
 
-  function increaseAmount() {
+  function increaseAmount(): void {
     setQuantity((state) => state + 1)
+  }
+
+  function handleAddItemToCart(): void {
+    dispatchCartState({
+      type: CartActionTypes.ADD_ITEM,
+      payload: {
+        item: {
+          id: coffee.id,
+          amount: quantity,
+        },
+      },
+    })
   }
 
   return (
@@ -51,7 +68,7 @@ export function Card({ coffee }: ICardProps) {
             onReduceAmount={reduceAmount}
             onIncreaseAmount={increaseAmount}
           />
-          <button>
+          <button onClick={handleAddItemToCart}>
             <ShoppingCart size={32} weight="fill" />
           </button>
         </BuySection>

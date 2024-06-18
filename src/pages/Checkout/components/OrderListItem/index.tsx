@@ -7,23 +7,16 @@ import {
   RemoveListItemButton,
 } from './styles'
 
-export function OrderListItem() {
-  return (
-    <ListItem>
-      <ListInfo>
-        <img src={latteCoffeeImg} alt="" />
-        <div>
-          <span>Expresso Tradicional</span>
-          <ListActionsContainer>
-            <Counter />
-            <RemoveListItemButton>
-              <Trash size={16} /> <span>Remover</span>
-            </RemoveListItemButton>
-          </ListActionsContainer>
-        </div>
-      </ListInfo>
+interface IOrderListItemProps {
+  amount: number
+  id: string
+  title: string
+  price: number
+  image: string
+}
 
-      <span>R$ 9,90</span>
-    </ListItem>
+export function OrderListItem({ title, image }: IOrderListItemProps) {
+  return (
+    
   )
 }
