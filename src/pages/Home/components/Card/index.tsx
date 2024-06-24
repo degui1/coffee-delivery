@@ -45,6 +45,7 @@ export function Card({ coffee }: ICardProps) {
         },
       },
     })
+    setQuantity(0)
   }
 
   return (
@@ -61,7 +62,12 @@ export function Card({ coffee }: ICardProps) {
 
         <BuySection>
           <span>
-            R$ <span className="cardPrice">{coffee.price}</span>
+            <span className="cardPrice">
+              {new Intl.NumberFormat('pt-br', {
+                currency: 'BRL',
+                style: 'currency',
+              }).format(coffee.price)}
+            </span>
           </span>
           <Counter
             amount={quantity}

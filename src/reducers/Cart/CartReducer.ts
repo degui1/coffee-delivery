@@ -164,7 +164,7 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
         ...action.payload.order,
       }
 
-      action.payload.callbackNavigation(`/success/${newOrder.id}/success`)
+      action.payload.callbackNavigation(`/delivery/${newOrder.id}`)
 
       return {
         cart: [],

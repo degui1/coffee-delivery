@@ -6,9 +6,29 @@ import {
   DeliveryInfoContainer,
 } from './styles'
 import { useTheme } from 'styled-components'
+import { useCart } from '../../hooks/useCart'
+import { useParams } from 'react-router-dom'
 
 export function Delivery() {
   const theme = useTheme()
+
+  const { cartState } = useCart()
+  const { orderId } = useParams()
+
+  const orderInfo = cartState.orders.find(
+    (order) => order.id === Number(orderId),
+  )
+
+  if (!orderInfo?.id) {
+    return null
+  }
+
+  const paymentMethodTranslation = {
+    credit: 'Cartão de crédito',
+    debit: 'Cartão de débito',
+    cash: 'Dinheiro',
+  }
+
   return (
     <DeliveryContainer>
       <DeliveryHeader>
@@ -25,8 +45,13 @@ export function Delivery() {
               style={{ backgroundColor: theme.purple }}
             />
             <span>
-              Entrega em <span>x, 102</span>
-              <p>Farrapos - Porto Alegre, RS</p>
+              Entrega em{' '}
+              <span>
+                {orderInfo.fullAddress}, {orderInfo.number}
+              </span>
+              <p>
+                {orderInfo.neighborhood} - {orderInfo.city}, {orderInfo.state}
+              </p>
             </span>
           </div>
           <div>
@@ -48,7 +73,7 @@ export function Delivery() {
             />
             <span>
               Pagamento na entrega
-              <p>Cartão de crédito</p>
+              <p>{paymentMethodTranslation[orderInfo.paymentMethod]}</p>
             </span>
           </div>
         </DeliveryInfoContainer>

@@ -41,7 +41,7 @@ import { CartActionTypes } from '../../reducers/Cart/CartReducer'
 type CartFormInputs = {
   cep: number
   street: string
-  number: number
+  number: string
   fullAddress: string
   neighborhood: string
   city: string
@@ -52,7 +52,7 @@ type CartFormInputs = {
 const newOrder = z.object({
   cep: z.number({ invalid_type_error: 'Informe o CEP' }),
   street: z.string().min(1, 'Informe a rua'),
-  number: z.number().min(1, 'Informe o número da residência'),
+  number: z.string().min(1, 'Informe o número da residência'),
   fullAddress: z.string(),
   neighborhood: z.string().min(1, 'Informe o bairro'),
   city: z.string().min(1, 'Informe a cidade'),

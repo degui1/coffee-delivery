@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { mixins } from '../../styles/mixins'
 
 export const HeaderContainer = styled.header`
   display: flex;
@@ -41,5 +42,28 @@ export const ActionContainer = styled.div`
     padding: 0.5rem;
     background-color: ${(props) => props.theme['yellow-light']};
     color: ${(props) => props.theme['yellow-dark']};
+    &[aria-disabled='true'] {
+      pointer-events: none;
+    }
+
+    position: relative;
+  }
+
+  span {
+    ${mixins.fonts.textS};
+    font-weight: bold;
+    color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme['yellow-dark']};
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transform: translate(50%, -50%);
   }
 `
