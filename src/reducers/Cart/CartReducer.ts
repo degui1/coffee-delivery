@@ -1,8 +1,12 @@
+import { NavigateFunction } from 'react-router-dom'
+import { OrderInfo } from '../../pages/Checkout'
+
 export enum CartActionTypes {
   ADD_ITEM = 'ADD_ITEM',
   REMOVE_ITEM = 'REMOVE_ITEM',
   INCREMENT_ITEM_AMOUNT = 'INCREMENT_ITEM_AMOUNT',
   DECREMENT_ITEM_AMOUNT = 'DECREMENT_ITEM_AMOUNT',
+  CHECKOUT = 'CHECKOUT',
 }
 
 export interface Item {
@@ -38,7 +42,15 @@ type DecrementItemAction = {
   }
 }
 
-export interface Order {
+type CheckoutAction = {
+  type: CartActionTypes.CHECKOUT
+  payload: {
+    order: OrderInfo
+    callbackNavigation: NavigateFunction
+  }
+}
+
+export interface Order extends OrderInfo {
   id: number
   items: Item[]
 }
@@ -53,6 +65,7 @@ export type CartActions =
   | RemoveItemAction
   | IncrementItemAction
   | DecrementItemAction
+  | CheckoutAction
 
 export function CartReducer(state: CartState, action: CartActions): CartState {
   switch (action.type) {
@@ -61,7 +74,7 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
         (item) => item.id === action.payload.item.id,
       )
 
-      if (itemAlreadyExists) {
+      if (itemAlreadyExists > -1) {
         return {
           ...state,
           cart: state.cart.map((item) => {
@@ -88,7 +101,7 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
         (item) => item.id === action.payload.itemId,
       )
 
-      if (hasSelectedItem) {
+      if (hasSelectedItem > -1) {
         return {
           ...state,
           cart: state.cart.filter((item) => item.id !== action.payload.itemId),
@@ -103,7 +116,7 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
         (item) => item.id === action.payload.itemId,
       )
 
-      if (itemToIncrement) {
+      if (itemToIncrement > -1) {
         return {
           ...state,
           cart: state.cart.map((item) => {
@@ -126,7 +139,7 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
         (item) => item.id === action.payload.itemId,
       )
 
-      if (itemToDecrement) {
+      if (itemToDecrement > -1) {
         return {
           ...state,
           cart: state.cart.map((item) => {
@@ -142,6 +155,21 @@ export function CartReducer(state: CartState, action: CartActions): CartState {
       }
 
       return state
+    }
+
+    case CartActionTypes.CHECKOUT: {
+      const newOrder: Order = {
+        id: new Date().getTime(),
+        items: state.cart,
+        ...action.payload.order,
+      }
+
+      action.payload.callbackNavigation(`/success/${newOrder.id}/success`)
+
+      return {
+        cart: [],
+        orders: [...state.orders, newOrder],
+      }
     }
 
     default:

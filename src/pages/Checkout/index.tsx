@@ -12,6 +12,7 @@ import {
   OrderContainer,
   OrderListContainer,
   PaymentContainer,
+  PaymentErrorMessage,
   PaymentMethodContainer,
   RemoveListItemButton,
   Total,
@@ -27,7 +28,7 @@ import {
 } from 'phosphor-react'
 import { useTheme } from 'styled-components'
 import { TextInput } from '../../components/Form/TextField'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { Radio } from '../../components/Form/Radio'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -40,7 +41,7 @@ import { CartActionTypes } from '../../reducers/Cart/CartReducer'
 type CartFormInputs = {
   cep: number
   street: string
-  number: string
+  number: number
   fullAddress: string
   neighborhood: string
   city: string
@@ -61,17 +62,24 @@ const newOrder = z.object({
   }),
 })
 
+const shippingPrice = 3.5
+
 export type OrderInfo = z.infer<typeof newOrder>
 
 export function Checkout() {
   const theme = useTheme()
-  const { register } = useForm<CartFormInputs>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CartFormInputs>({
     resolver: zodResolver(newOrder),
   })
 
-  const { cartState, dispatchCartState } = useCart()
+  const selectedPaymentMethod = watch('paymentMethod')
 
-  console.log(cartState)
+  const { cartState, dispatchCartState, navigate } = useCart()
 
   const coffeesInCart = cartState.cart.map((item) => {
     const coffee = coffees.find((coffee) => coffee.id === item.id)
@@ -84,6 +92,10 @@ export function Checkout() {
       amount: item.amount,
     }
   })
+
+  const totalPrice = coffeesInCart.reduce((previousValue, currentValue) => {
+    return (previousValue += currentValue.price * currentValue.amount)
+  }, 0)
 
   function handleIncreaseAmount(itemId: string) {
     dispatchCartState({
@@ -103,12 +115,35 @@ export function Checkout() {
     })
   }
 
+  function handleRemoveItem(itemId: string) {
+    dispatchCartState({
+      type: CartActionTypes.REMOVE_ITEM,
+      payload: {
+        itemId,
+      },
+    })
+  }
+
+  const handleSuccessOrder: SubmitHandler<CartFormInputs> = (data) => {
+    if (cartState.cart.length === 0) {
+      return alert('Carrinho vazio')
+    }
+
+    dispatchCartState({
+      type: CartActionTypes.CHECKOUT,
+      payload: {
+        order: data,
+        callbackNavigation: navigate,
+      },
+    })
+  }
+
   return (
     <CheckoutContainer>
       <main>
         <h1>Complete seu pedido</h1>
 
-        <form id="order">
+        <form id="order" onSubmit={handleSubmit(handleSuccessOrder)}>
           <FormContainer>
             <InformSection>
               <MapPinLine size={22} color={theme['yellow-dark']} />
@@ -122,21 +157,21 @@ export function Checkout() {
                 placeholder="CEP"
                 type="number"
                 containerProps={{ style: { gridArea: 'cep' } }}
-                error={new Error('Test')}
+                error={errors.cep}
                 {...register('cep', { valueAsNumber: true })}
               />
 
               <TextInput
                 placeholder="Rua"
                 containerProps={{ style: { gridArea: 'street' } }}
-                error={new Error('Test')}
+                error={errors.street}
                 {...register('street')}
               />
 
               <TextInput
                 placeholder="Número"
                 containerProps={{ style: { gridArea: 'number' } }}
-                error={new Error('Test')}
+                error={errors.number}
                 {...register('number')}
               />
 
@@ -144,21 +179,21 @@ export function Checkout() {
                 placeholder="Complemento"
                 optional
                 containerProps={{ style: { gridArea: 'fullAddress' } }}
-                error={new Error('Test')}
+                error={errors.fullAddress}
                 {...register('fullAddress')}
               />
 
               <TextInput
                 placeholder="Bairro"
                 containerProps={{ style: { gridArea: 'neighborhood' } }}
-                error={new Error('Test')}
+                error={errors.neighborhood}
                 {...register('neighborhood')}
               />
 
               <TextInput
                 placeholder="Cidade"
                 containerProps={{ style: { gridArea: 'city' } }}
-                error={new Error('Test')}
+                error={errors.city}
                 {...register('city')}
               />
 
@@ -166,7 +201,7 @@ export function Checkout() {
                 placeholder="UF"
                 maxLength={2}
                 containerProps={{ style: { gridArea: 'state' } }}
-                error={new Error('test')}
+                error={errors.state}
                 {...register('state')}
               />
             </FormFieldsContainer>
@@ -186,7 +221,7 @@ export function Checkout() {
 
             <PaymentContainer>
               <Radio
-                isSelected={true}
+                isSelected={selectedPaymentMethod === 'credit'}
                 {...register('paymentMethod')}
                 value="credit"
               >
@@ -194,21 +229,27 @@ export function Checkout() {
                 <span>Cartão de crédito</span>
               </Radio>
               <Radio
-                isSelected={false}
+                isSelected={selectedPaymentMethod === 'debit'}
                 {...register('paymentMethod')}
-                value="credit"
+                value="debit"
               >
                 <Bank size={16} />
                 <span>Cartão de débito</span>
               </Radio>
               <Radio
-                isSelected={false}
+                isSelected={selectedPaymentMethod === 'cash'}
                 {...register('paymentMethod')}
-                value="credit"
+                value="cash"
               >
                 <Money size={16} />
                 <span>Dinheiro</span>
               </Radio>
+
+              {errors.paymentMethod ? (
+                <PaymentErrorMessage role="alert">
+                  {errors.paymentMethod.message}
+                </PaymentErrorMessage>
+              ) : null}
             </PaymentContainer>
           </PaymentMethodContainer>
         </form>
@@ -236,14 +277,23 @@ export function Checkout() {
                             handleReduceAmount(item.id)
                           }}
                         />
-                        <RemoveListItemButton>
+                        <RemoveListItemButton
+                          onClick={() => {
+                            handleRemoveItem(item.id)
+                          }}
+                        >
                           <Trash size={16} /> <span>Remover</span>
                         </RemoveListItemButton>
                       </ListActionsContainer>
                     </div>
                   </ListInfo>
 
-                  <span>R$ 9,90</span>
+                  <span>
+                    {new Intl.NumberFormat('pt-br', {
+                      currency: 'BRL',
+                      style: 'currency',
+                    }).format(item.price * item.amount)}
+                  </span>
                 </ListItem>
               )
             })}
@@ -252,15 +302,30 @@ export function Checkout() {
           <AmountContainer>
             <Value>
               <span>Total de itens</span>
-              <span>R$ 29,70</span>
+              <span>
+                {new Intl.NumberFormat('pt-br', {
+                  currency: 'BRL',
+                  style: 'currency',
+                }).format(totalPrice)}
+              </span>
             </Value>
             <Value>
               <span>Entrega</span>
-              <span>R$ 3,50</span>
+              <span>
+                {new Intl.NumberFormat('pt-br', {
+                  currency: 'BRL',
+                  style: 'currency',
+                }).format(shippingPrice)}
+              </span>
             </Value>
             <Total>
               <span>Total</span>
-              <span>R$ 33,20</span>
+              <span>
+                {new Intl.NumberFormat('pt-br', {
+                  currency: 'BRL',
+                  style: 'currency',
+                }).format(totalPrice + shippingPrice)}
+              </span>
             </Total>
           </AmountContainer>
 

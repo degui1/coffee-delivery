@@ -200,3 +200,8 @@ export const OrderButton = styled.button`
     background-color: ${({ theme }) => theme['yellow-dark']};
   }
 `
+export const PaymentErrorMessage = styled.p`
+  ${mixins.fonts.textXS};
+  font-weight: 400;
+  color: red;
+`

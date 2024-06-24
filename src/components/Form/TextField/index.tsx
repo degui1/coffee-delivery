@@ -9,12 +9,13 @@ import {
 
 // import { FieldError } from 'react-hook-form'
 import { Box, Container, ErrorMessage } from './styles'
+import { FieldError } from 'react-hook-form'
 
 type ITextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   optional?: boolean
   containerProps?: HTMLAttributes<HTMLDivElement>
   // error?: FieldError
-  error?: Error
+  error?: FieldError
 }
 
 export const TextInput = forwardRef(function TextInput(
